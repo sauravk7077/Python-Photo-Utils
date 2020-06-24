@@ -1,25 +1,24 @@
 from PIL import Image, ImageFilter
 
-
 img:Image.Image = None
 
-
 def run():
+    global img
     fp = input("Enter the location of the file: ")
     isTrue = True
-    while(isTrue):
-        try:
-            img = Image.open(fp)
-            print(img.size, img.mode)
+    try:
+        img = Image.open(fp)
+        print(img.size, img.mode)
+        while(isTrue):
             printChoices()
             value:int = int(input("Enter the value: "))
-            runChoice(value)
-            save()
-            img.close()
-            del img
-            isTrue = False
-        except Exception as e:
-            print("Please enter valid input")
+            if runChoice(value) == 1:
+                isTrue = False
+        save()
+        img.close()
+        del img
+    except Exception as e:
+        print("Please enter valid input ",e)
 
 
 def printChoices():
@@ -30,15 +29,18 @@ def printChoices():
     
 
 def rotate():
+    global img
     angle:float = float(input("Enter the angle (in degrees): "))
     img = img.rotate(angle)
 
 
 def scale():
+    global img
     size:tuple = tuple(input("Enter the size seperated by comma").split(','))
     img = img.resize(size)
 
 def display():
+    global img
     img.show()
 
 def runChoice(i:int):
@@ -50,6 +52,8 @@ def runChoice(i:int):
         display()
     else:
         print("You have entered a wrong choice")
+        return 0
+    return 1
 
 
 def save():
